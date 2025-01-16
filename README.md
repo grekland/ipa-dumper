@@ -28,7 +28,7 @@
 
 1. Clone the repository:
    ```bash
-   git clone [<repository-url>](https://github.com/grekland/ipa-dumper/tree/main)
+   git clone https://github.com/grekland/ipa-dumper/tree/main
    cd ipa-dumper
    ```
 
@@ -66,7 +66,6 @@ python dumper.py <app-identifier> --host <ip-address> [options]
 - `--port`: SSH port (default: `22`).
 - `--user`: SSH username (default: `root`).
 - `--password`: SSH password for authentication.
-- `--key-file`: Path to SSH private key file.
 
 #### Output Options
 - `--output`: Custom directory for the dumped IPA (default: `~/Downloads/ios_dumps/`).
