@@ -296,6 +296,8 @@ class IpaBuilder:
                 logger.error(f"❌ Application '{app_identifier}' not found")
                 return False
 
+
+            print("***")
             logger.info(f"🚀 Starting dump process for: {display_name}")
             self.create_directories()
 
@@ -307,7 +309,7 @@ class IpaBuilder:
                 logger.info("⏳ Dumping application contents...")
                 script.post('dump')
 
-                logger.info("⏳ Waiting for the dump to complete...")
+                logger.info("⏳ Waiting for the dump to complete...\n***")
                 if not self.finished.wait(timeout=7200):
                     raise TimeoutError("Dump operation timed out")
                 logger.info("✅ Dump operation completed successfully")
@@ -370,7 +372,7 @@ def create_parser():
     ssh_group = parser.add_argument_group('SSH Connection Options')
     ssh_group.add_argument(
         '--host',
-        default='127.0.0.1',
+        default='192.168.1.103',
         help='SSH hostname (default: 127.0.0.1)'
     )
     ssh_group.add_argument(
@@ -386,6 +388,7 @@ def create_parser():
     )
     ssh_group.add_argument(
         '--password',
+        default="sigma",
         help='SSH password for authentication'
     )
     ssh_group.add_argument(
