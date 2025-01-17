@@ -200,7 +200,6 @@ class IpaBuilder:
                 self._handle_app_payload(payload, update_progress)
             elif 'done' in payload:
                 self.finished.set()
-                self.session.detach()
                 
         except Exception as e:
             logger.error(f"Error handling message: {e}")
@@ -252,18 +251,6 @@ class IpaBuilder:
             logger.info(f'IPA generated successfully: {ipa_path}')
         except Exception as e:
             logger.error(f"Failed to generate IPA: {e}")
-        finally:
-            for item in self.payload_dir.iterdir():
-                if item.is_dir() and item.name.endswith('.app'):
-                    continue
-                try:
-                    if item.is_file():
-                        item.unlink()
-                    elif item.is_dir():
-                        shutil.rmtree(item, onerror=self._force_remove)
-                except Exception as e:
-                    logger.error(f"Failed to clean up {item}: {e}")
-
 
     def dump_app(self, app_identifier: str) -> bool:
         """Main method to dump the application"""
@@ -313,6 +300,7 @@ class IpaBuilder:
                 if not self.finished.wait(timeout=7200):
                     raise TimeoutError("Dump operation timed out")
                 logger.info("✅ Dump operation completed successfully")
+                session.detach()
 
             logger.info("📦 Creating IPA file...")
             self.generate_ipa(display_name)
@@ -347,6 +335,18 @@ class IpaBuilder:
                 print(f"📝 Check logs for details")
                 print("="*50)
             
+            for item in self.payload_dir.iterdir():
+                if item.is_dir() and item.name.endswith('.app'):
+                    continue
+                try:
+                    if item.is_file():
+                        item.unlink()
+                    elif item.is_dir():
+                        shutil.rmtree(item, onerror=self._force_remove)
+                except:
+                    logger.error(f"Failed to clean up *.fid files. This can be done manually")
+                    break
+
             return success
 
 def create_parser():
@@ -372,7 +372,7 @@ def create_parser():
     ssh_group = parser.add_argument_group('SSH Connection Options')
     ssh_group.add_argument(
         '--host',
-        default='192.168.1.103',
+        default='127.0.0.1',
         help='SSH hostname (default: 127.0.0.1)'
     )
     ssh_group.add_argument(
@@ -388,7 +388,6 @@ def create_parser():
     )
     ssh_group.add_argument(
         '--password',
-        default="sigma",
         help='SSH password for authentication'
     )
     ssh_group.add_argument(
