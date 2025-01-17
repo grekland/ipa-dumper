@@ -238,16 +238,30 @@ class IpaBuilder:
                     target_path.parent.mkdir(parents=True, exist_ok=True)
                     shutil.move(self.payload_dir / key, target_path)
 
+            app_folder = self.payload_dir / app_name
+            if not app_folder.exists() or not app_folder.is_dir():
+                raise RuntimeError(f"The .app folder '{app_folder}' does not exist or is not a directory.")
+
             with zipfile.ZipFile(ipa_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
-                for file_path in self.payload_dir.rglob('*'):
+                for file_path in app_folder.rglob('*'):
                     if file_path.is_file():
-                        zipf.write(file_path, file_path.relative_to(self.output_dir))
+                        zipf.write(file_path, file_path.relative_to(self.payload_dir.parent))
 
             logger.info(f'IPA generated successfully: {ipa_path}')
         except Exception as e:
             logger.error(f"Failed to generate IPA: {e}")
         finally:
-            shutil.rmtree(self.payload_dir, onerror=self._force_remove)
+            for item in self.payload_dir.iterdir():
+                if item.is_dir() and item.name.endswith('.app'):
+                    continue
+                try:
+                    if item.is_file():
+                        item.unlink()
+                    elif item.is_dir():
+                        shutil.rmtree(item, onerror=self._force_remove)
+                except Exception as e:
+                    logger.error(f"Failed to clean up {item}: {e}")
+
 
     def dump_app(self, app_identifier: str) -> bool:
         """Main method to dump the application"""
