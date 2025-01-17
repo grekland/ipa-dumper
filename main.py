@@ -370,7 +370,7 @@ def create_parser():
     ssh_group = parser.add_argument_group('SSH Connection Options')
     ssh_group.add_argument(
         '--host',
-        default='192.168.1.103',
+        default='127.0.0.1',
         help='SSH hostname (default: 127.0.0.1)'
     )
     ssh_group.add_argument(
@@ -386,7 +386,6 @@ def create_parser():
     )
     ssh_group.add_argument(
         '--password',
-        default="sigma",
         help='SSH password for authentication'
     )
     ssh_group.add_argument(
