@@ -200,6 +200,8 @@ class IpaBuilder:
                 self._handle_app_payload(payload, update_progress)
             elif 'done' in payload:
                 self.finished.set()
+                self.session.detach()
+                
         except Exception as e:
             logger.error(f"Error handling message: {e}")
         finally:
@@ -238,7 +240,7 @@ class IpaBuilder:
                     target_path.parent.mkdir(parents=True, exist_ok=True)
                     shutil.move(self.payload_dir / key, target_path)
 
-            app_folder = self.payload_dir / app_name
+            app_folder = next(self.payload_dir.glob('*.app'), None)
             if not app_folder.exists() or not app_folder.is_dir():
                 raise RuntimeError(f"The .app folder '{app_folder}' does not exist or is not a directory.")
 
@@ -368,7 +370,7 @@ def create_parser():
     ssh_group = parser.add_argument_group('SSH Connection Options')
     ssh_group.add_argument(
         '--host',
-        default='127.0.0.1',
+        default='192.168.1.103',
         help='SSH hostname (default: 127.0.0.1)'
     )
     ssh_group.add_argument(
@@ -384,6 +386,7 @@ def create_parser():
     )
     ssh_group.add_argument(
         '--password',
+        default="sigma",
         help='SSH password for authentication'
     )
     ssh_group.add_argument(
