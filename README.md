@@ -18,7 +18,7 @@
 ## Prerequisites
 
 - **Python**: Version 3.7 or higher.
-- **Jailbroken iOS Device**: Frida must be installed(see [https://medium.com/@zahidaz/manually-installing-and-configuring-frida-on-jailbroken-ios-devices-a-step-by-step-guide-e9e2673fdfc9](url)). 
+- **Jailbroken iOS Device**: Frida must be installed(see [frida installaion guide]([url](https://medium.com/@zahidaz/manually-installing-and-configuring-frida-on-jailbroken-ios-devices-a-step-by-step-guide-e9e2673fdfc9))). 
 - **USB Connection**: To the target iOS device.
 - **SSH Access**: Enabled on the device.
 
