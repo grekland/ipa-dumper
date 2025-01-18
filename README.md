@@ -18,7 +18,7 @@
 ## Prerequisites
 
 - **Python**: Version 3.7 or higher.
-- **Jailbroken iOS Device**: Frida must be installed.
+- **Jailbroken iOS Device**: Frida must be installed(see [https://medium.com/@zahidaz/manually-installing-and-configuring-frida-on-jailbroken-ios-devices-a-step-by-step-guide-e9e2673fdfc9](url)). 
 - **USB Connection**: To the target iOS device.
 - **SSH Access**: Enabled on the device.
 
@@ -96,8 +96,6 @@ python dumper.py com.example.app --host 192.168.1.100 --password mypass --output
 The tool generates:
 
 1. **Decrypted IPA File**: Named after the app.
-2. **Logs**: Clear and grouped output for debugging and insights.
-
 ---
 
 ## Error Handling
